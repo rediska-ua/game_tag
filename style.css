@@ -1,0 +1,36 @@
+html {
+    height: 100%;
+}
+  
+body {
+    height: 100%;
+    background-image: linear-gradient(#6A5ACD, #87CEEB);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.field {
+    height: 500px;
+    width: 500px;
+    background-color: wheat;
+    border: 1px solid black;
+    border-radius: 10px;
+    position: relative;
+}
+
+.cell {
+    box-sizing: border-box;
+    height: 100px;
+    width: 100px;
+    background-color: teal;
+    border: 2px solid black;
+    border-radius: 10px;
+    position: absolute;
+    font-size: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+  
