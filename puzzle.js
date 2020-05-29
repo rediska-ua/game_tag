@@ -2,52 +2,110 @@
 
 const field = document.querySelector('.field');
 
-const sizeCell = 100;
+const oneCellSize = 100;
 
-const cellEmpty = {
-    top: 0,
-    left: 0,
+const size = 5;
+
+const matrix = Math.pow(size, 2);
+
+let move = 0;
+
+const emptyCell = {
+    value: (matrix),
+    top: size - 1,
+    left: size -1,
 };
 
-const activeCells = [];
-activeCells.push(cellEmpty);
+const cells = [];
+cells.push(emptyCell);
 
-const shift = (index) => {
-    const cell = activeCells[index];
+const numbers = [...Array(matrix - 1).keys()].sort(() => Math.random() - 0.5);
 
-    cell.element.style.top = `${cellEmpty.top * sizeCell}px`;
-    cell.element.style.left = `${cellEmpty.left * sizeCell}px`;
+const shift = (index, n) => {
 
-    const emptyLeft = cellEmpty.left;
-    const emptyTop = cellEmpty.top;
-    cellEmpty.left = cell.left;
-    cellEmpty.top = cell.top;
+    const cell = cells[index];
+
+    const differenceLeft = Math.abs(emptyCell.left - cell.left);
+    const differenceTop = Math.abs(emptyCell.top - cell.top);
+
+
+    if (differenceLeft + differenceTop > 1) {
+        return;
+    };
+    
+    move = move + 1;
+    document.getElementById("move").textContent = `Move: ${move}`;
+
+    cell.element.style.top = `${emptyCell.top * oneCellSize}px`;
+    cell.element.style.left = `${emptyCell.left * oneCellSize}px`;
+
+    
+
+    const emptyLeft = emptyCell.left;
+    const emptyTop = emptyCell.top;
+    emptyCell.left = cell.left;
+    emptyCell.top = cell.top;
     cell.left = emptyLeft;
     cell.top = emptyTop;
 
+
+    console.log(cells)
+
+    const isFinished = cells.every(cell => {
+        console.log(cell.value, cell.top, cell.left)
+        return cell.value === cell.top * n + ((cell.left % n) + 1);
+    });
+
+    if (isFinished) {
+        alert('You won!');
+    };
+
 };
 
-for (let i = 1; i <= 24; i++) {
-    const cell = document.createElement('div');
-    cell.className = 'cell';
-    cell.innerHTML = i;
 
-    const top = i % 5;
-    const left = (i - top) / 5;
+const game = (n) => {
 
-    activeCells.push({
-        top: top,
-        left: left,
-        element: cell,
-    })
+    for (let i = 1; i <= (Math.pow(n, 2) - 1); i++) {
+        const cell = document.createElement('div');
+        const value = numbers[i - 1] + 1;
+        cell.className = 'cell';
+        cell.innerHTML = value;
 
-    cell.style.top = `${top * sizeCell}px`;
-    cell.style.left = `${left * sizeCell}px`;
+        const left = (i - 1) % n;
+        const top = ((i - left) - 1) / n;
+
+        cells.push({
+            value: value,
+            top: top,
+            left: left,
+            element: cell,
+        })
+
+        cell.style.top = `${top * oneCellSize}px`;
+        cell.style.left = `${left * oneCellSize}px`;
 
 
-    field.append(cell);
+        field.append(cell);
 
-    cell.addEventListener('click', () => {
-        shift(i);
-    })
+        cell.addEventListener('click', () => {
+            shift(i, n);
+        })
+    };
 };
+
+game(size);
+
+let sec = 0;
+
+const tick = () => {
+    sec++;
+    document.getElementById("time").textContent = `Time: ${sec}`;
+
+};
+
+const init = () => {
+    setInterval(tick, 1000);
+
+}
+
+init();
