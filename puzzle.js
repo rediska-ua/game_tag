@@ -2,16 +2,18 @@
 
 const field = document.querySelector('.field');
 
-const oneCellSize = 100;
-
 const size = 5;
+
+if(size === 0) {
+    throw Error('size cannot be 0')
+}
 
 const matrix = Math.pow(size, 2);
 
 let move = 0;
 
 const emptyCell = {
-    value: (matrix),
+    value: matrix,
     top: size - 1,
     left: size -1,
 };
@@ -21,35 +23,29 @@ cells.push(emptyCell);
 
 const numbers = [...Array(matrix - 1).keys()].sort(() => Math.random() - 0.5);
 
-const shift = (index, n) => {
+const shift = (index, n, oneCellSize) => {
 
     const cell = cells[index];
 
     const differenceLeft = Math.abs(emptyCell.left - cell.left);
     const differenceTop = Math.abs(emptyCell.top - cell.top);
 
-
     if (differenceLeft + differenceTop > 1) {
-        return;
-    };
+        return 'are not neighbours';
+    }
     
     move = move + 1;
     document.getElementById("move").textContent = `Move: ${move}`;
 
     cell.element.style.top = `${emptyCell.top * oneCellSize}px`;
     cell.element.style.left = `${emptyCell.left * oneCellSize}px`;
-
-    
-
+ 
     const emptyLeft = emptyCell.left;
     const emptyTop = emptyCell.top;
     emptyCell.left = cell.left;
     emptyCell.top = cell.top;
     cell.left = emptyLeft;
     cell.top = emptyTop;
-
-
-    console.log(cells)
 
     const isFinished = cells.every(cell => {
         console.log(cell.value, cell.top, cell.left)
@@ -58,18 +54,43 @@ const shift = (index, n) => {
 
     if (isFinished) {
         alert('You won!');
-    };
+    }
+
+    return 'shifted'
 
 };
 
+const game = (n, oneCellSize)  => {
 
-const game = (n) => {
+    const checkGame = typeof n === 'number' && typeof oneCellSize === 'number';
+    
+    if (!checkGame) {
+        throw Error('values are expected to be numbers');
+    }
+    if(oneCellSize === 0) {
+        throw Error('cannot create cell if size is 0')
+    }
+    if(n === 1) {
+        throw Error('you will have only one cell')
+    }
+    if(n >= 8) {
+        throw Error('the field is too big')
+    }
+    if(oneCellSize > 200) {
+        throw Error('the size of one cell is too big')
+    }
+
+    field.style.width = `${size*oneCellSize}px`;
+    field.style.height = `${size*oneCellSize}px`;
 
     for (let i = 1; i <= (Math.pow(n, 2) - 1); i++) {
         const cell = document.createElement('div');
         const value = numbers[i - 1] + 1;
         cell.className = 'cell';
         cell.innerHTML = value;
+
+        cell.style.width = `${oneCellSize}px`;
+        cell.style.height = `${oneCellSize}px`;
 
         const left = (i - 1) % n;
         const top = ((i - left) - 1) / n;
@@ -84,28 +105,27 @@ const game = (n) => {
         cell.style.top = `${top * oneCellSize}px`;
         cell.style.left = `${left * oneCellSize}px`;
 
-
         field.append(cell);
 
         cell.addEventListener('click', () => {
-            shift(i, n);
+            console.log(shift(i, n, oneCellSize));
         })
-    };
+    }
+
+    return 'game has started'
 };
 
-game(size);
+console.log(game(size, 100));
 
 let sec = 0;
 
 const tick = () => {
     sec++;
     document.getElementById("time").textContent = `Time: ${sec}`;
-
 };
 
 const init = () => {
     setInterval(tick, 1000);
-
-}
+};
 
 init();
