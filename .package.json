@@ -1,0 +1,30 @@
+{
+  "name": "game_tag",
+  "version": "1.0.0",
+  "description": "15 Puzzle game JavaScript",
+  "author": "Maksym Sheiko <maksimsheyko2012@gmail.com>",
+  "license": "MIT",
+  "keywords": [
+    "js",
+    "javascript",
+    "web",
+    "15puzzle",
+    "game",
+    "browser",
+  ],
+  "browser": "puzzle.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rediska-ua/game_tag.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rediska-ua/game_tag/issues"
+  },
+  "homepage": "https://github.com/rediska-ua/game_tag",
+  "engines": {
+    "node": ">=12.15.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.1.0"
+  },
+}
